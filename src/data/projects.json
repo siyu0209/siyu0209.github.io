@@ -94,48 +94,50 @@
   {
     "id": "claude-code-relay",
     "title": "Claude Code Relay Proxy",
-    "subtitle": "把 OpenAI 格式的中转站接进 Claude Code",
+    "subtitle": "让只说 Anthropic 协议的 Claude Code，用上只提供 OpenAI 协议的中转站",
     "category": "ai",
     "year": 2026,
-    "role": "独立开发：协议转换 / 扩展 / 发布",
+    "role": "独立开发：协议转换 / VS Code 扩展 / 打包发布",
     "glyph": "ai",
-    "techStack": ["TypeScript", "VS Code API", "协议转换", "OpenAI 兼容格式", "Node.js"],
+    "techStack": ["JavaScript", "Node.js", "VS Code API", "协议转换", "SSE 流式"],
     "cover": "/projects/relay-cover.jpg",
     "coverThumb": "/projects/relay-cover-thumb.jpg",
     "gallery": [
       { "src": "/projects/relay-1.jpg", "caption": "对话页" }
     ],
-    "summary": "在本地做一层协议转换，把 OpenAI 格式的请求翻成 Claude Code 认的接口。",
+    "summary": "一个 VS Code 扩展：在本地起代理，把 Claude Code 发出的 Anthropic /v1/messages 翻成 OpenAI 的 /v1/chat/completions，再把响应和流式分片翻回去。",
     "highlights": [
-      "OpenAI 格式与 Claude Code 协议双向转换",
-      "支持 OpenAI / Claude / DeepSeek 等中转站",
-      "只在 VS Code 内生效，不接管系统代理"
+      "本地探测上游协议，按需分流",
+      "只改 VS Code 环境变量，停用即还原",
+      "三个文件 945 行，零 npm 依赖"
     ],
     "efficiency": [
-      { "label": "扩展版本", "value": "0.1.0", "hint": "" },
-      { "label": "接口格式", "value": "3", "hint": "OpenAI / Claude / DeepSeek" },
-      { "label": "生效范围", "value": "VS Code", "hint": "不改系统代理" }
+      { "label": "源码规模", "value": "945 行", "hint": "extension / proxy / transformer" },
+      { "label": "安装包", "value": "28 KB", "hint": "VSIX，0.1.0" },
+      { "label": "npm 依赖", "value": "0", "hint": "只用 Node 内置模块" }
     ],
-    "background": "Claude Code 只认自家的接口格式，手上的中转站大多是 OpenAI 格式，两边对不上，只能换回官方额度或者手动改请求。",
-    "difficulty": "两边不只是字段名不同：消息结构、流式返回的事件格式、工具调用的表达方式都不一样，转换错一处，客户端就整段没有响应。",
-    "solution": "在本地起一层代理做双向翻译：进来的 OpenAI 格式拆成 Claude Code 认识的结构，返回的流式事件再拼回去，客户端始终以为自己在跟原服务对话。配置只暴露必要的几项，其余按默认走。",
-    "result": "Claude Code 可以直接连 OpenAI 格式的中转站，切换中转站只改一处配置；扩展只在 VS Code 内生效，不接管系统代理。",
+    "background": "Claude Code 只认 Anthropic 的 /v1/messages，而手上的中转站大多只提供 OpenAI 的 /v1/chat/completions。两边对不上，要么换回官方额度，要么每次手动改请求。",
+    "difficulty": "要转换的不只是字段名：请求结构、响应结构、SSE 流式事件是三套不同的格式，中间还得先探测上游到底是哪种站点。任何一处对不上，客户端就会长时间没有任何响应，而错误信息只显示超时。",
+    "solution": "扩展在 127.0.0.1 上起一个本地 HTTP 服务，收到 /v1/messages 后先探测上游协议：是 OpenAI 站就把请求翻译成 /v1/chat/completions，再把普通响应与流式分片翻回 Anthropic 格式；是 Anthropic 站就原样透传。配置只改 VS Code 的 claudeCode.environmentVariables，停用扩展时自动还原，不碰 ~/.claude/settings.json。",
+    "result": "Claude Code 可以直接连 OpenAI 格式的中转站，换站只改一处配置；扩展停用即还原，原有的 CCswitch 配置不会被污染。源码与 VSIX 已公开，MIT。",
     "supportPlatforms": ["VS Code"],
     "downloadCount": null,
     "featureList": [
-      "不再手动改接口地址",
-      "换中转站不用重装客户端",
-      "协议差异在本地抹平",
-      "流式响应原样透传"
+      "状态栏显示代理状态与监听端口",
+      "四个命令管理启停、配置与日志",
+      "请求 / 响应 / 流式 SSE 三套转换器",
+      "上游协议自动探测，OpenAI 站自动翻译",
+      "请求日志落盘，排查时能对着看",
+      "已知限制：只转文本，图片与工具调用会丢弃"
     ],
     "repoStars": null,
     "contributors": null,
     "coreModule": [],
     "links": {
       "demo": null,
-      "repo": null,
-      "download": null,
-      "docs": null
+      "repo": "https://github.com/siyu0209/claude-code-relay-proxy",
+      "download": "https://github.com/siyu0209/claude-code-relay-proxy/releases/download/v0.1.0/claude-code-relay-0.1.0.vsix",
+      "docs": "https://github.com/siyu0209/claude-code-relay-proxy#readme"
     }
   }
 ]
