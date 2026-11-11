@@ -139,5 +139,67 @@
       "download": "https://github.com/siyu0209/claude-code-relay-proxy/releases/download/v0.1.0/claude-code-relay-0.1.0.vsix",
       "docs": "https://github.com/siyu0209/claude-code-relay-proxy#readme"
     }
+  },
+  {
+    "id": "whaleops",
+    "title": "鲸营 WhaleOps 跨境电商运营台",
+    "subtitle": "从选品打分到退货结案，13 个页面走完一条链，零依赖跑在本机",
+    "category": "efficiency",
+    "year": 2026,
+    "role": "独立开发：业务引擎 / 数据层 / 前端 / 命令行",
+    "glyph": "toolbox",
+    "techStack": ["Node.js", "node:sqlite", "原生前端", "CDP 采集", "状态机"],
+    "cover": "/projects/whaleops-cover.jpg",
+    "coverThumb": "/projects/whaleops-cover-thumb.jpg",
+    "gallery": [
+      { "src": "/projects/whaleops-1.jpg", "caption": "刊登队列与在线登记簿" },
+      { "src": "/projects/whaleops-2.jpg", "caption": "月度损益对账" },
+      { "src": "/projects/whaleops-3.jpg", "caption": "市场情报与销量估算" },
+      { "src": "/projects/whaleops-4.jpg", "caption": "履约作业" },
+      { "src": "/projects/whaleops-5.jpg", "caption": "退货售后" }
+    ],
+    "summary": "跨境卖家每天要在十几个系统之间切换：选品一个站、算账一个 Excel、库存又一个后台。我把这条链收进一台本地运营台，零依赖、数据全在自己电脑上。",
+    "highlights": [
+      "零依赖：没有 node_modules，双击就能跑",
+      "全线走同一套金额口径，再加一项指标自动长出",
+      "抓数据时敢标「不知道」，估算模型不编数"
+    ],
+    "efficiency": [
+      { "label": "业务引擎", "value": "22 个", "hint": "app/lib 下的纯函数模块" },
+      { "label": "数据表", "value": "27 张", "hint": "SQLite 单文件，0 外键" },
+      { "label": "自动化断言", "value": "323 条", "hint": "跑通不算过，口径也要对" },
+      { "label": "第三方依赖", "value": "0", "hint": "存储、服务、前端全是标准库" }
+    ],
+    "background": "一个人管店，最耗神的不是某个环节难，而是环节之间要手工搬数据：选品时算的毛利，和月底对账时算的净利，用的常常是两套口径；刊登、履约、退货各自的系统里都有状态，但没人告诉你「这个品现在还赚不赚钱」。我想做的是把这些口径统一到一台本地机器上，一条线走完，数据不出本机。",
+    "difficulty": "难点有三个。第一是口径：佣金、FBA 履约、头程、关税、VAT、广告、退货折损加起来十几项，任何一项在某个页面漏算，整站数字就不可信，而这类错误不会报错、只会安静地错。第二是汇率与币种：多站点多币种，缺一个汇率时如果按默认值兜底，账面数字会夸张几十倍——我实测过，缺汇率的越南盾会被当成美元。第三是抓取：竞品数据要抓公开页面，但出口 IP 一变，页面上的价格就换成另一种货币，而排名、评分这些指标又和 IP 无关，得分开对待。",
+    "solution": "把利润拆解做成一个共用的 breakdown 结构，所有页面和所有报表都从同一个引擎取值，新增一项指标只要在引擎里加一个键，前端表格按 key 遍历就自动长出来；汇率改成三态（已设置 / 用默认 / 缺失），缺失时页面报警而不是静默按美元算；上游采集把「出口通道」和「解析入库」拆成两层，本机直连抓与 IP 无关的指标，需要美国视角的走可插拔的中转通道，落库前按站点把货币符号归一成 ISO 币种，换不出美元价时宁可标「价格未知」给中位分。刊登、履约、退货都做成显式状态机，非法迁移在服务端拦掉，不在界面上给一个点了必然失败的按钮。",
+    "result": "13 个页面、22 个业务引擎、27 张表、60 多条接口和一套共用同一引擎的命令行。323 条自动化断言覆盖金额口径、状态机合法迁移、备份表清单完整性与界面守卫，全绿。另有 13 个页面的几何审计（溢出 / 超宽 / 裁切）全部为 0。代码与界面已公开，MIT。",
+    "supportPlatforms": ["Node.js 22+", "Windows / macOS / Linux"],
+    "downloadCount": null,
+    "featureList": [
+      "驾驶舱：净利率、保本 ACOS、可售天数、机会分",
+      "利润测算：佣金 / 履约 / 头程 / 关税 / VAT / 广告 / 退货全拆",
+      "关键词：词根聚类、埋词覆盖、竞品词差集",
+      "Listing 工坊：按平台限额生成标题与五点，含体检与合规",
+      "刊登队列：状态机 + 在线登记簿，可下架重上",
+      "履约作业：建包裹 / 采购 / 入库单，拆合重发",
+      "退货售后：从申请到结案的十个状态",
+      "月度损益：净利 / 净利率 / ACOS / TACOS / ROI，可下钻",
+      "库存补货：平滑 + 周内系数 + 安全库存 + 在途",
+      "广告诊断：ACOS 分层到否定 / 降竞价 / 抢量",
+      "市场情报：抓竞品详情与搜索页，反推月销并打分",
+      "多店铺口径：按店收窄全部统计，写入自动归属",
+      "零弹窗：全站只用轻提示与卡内结果行",
+      "已知限制：刊登只生成 payload，不代调平台写接口"
+    ],
+    "repoStars": null,
+    "contributors": null,
+    "coreModule": ["利润与损益引擎", "刊登状态机", "在线登记簿回写", "履约与退货流程", "上游采集与估算", "数据层与迁移"],
+    "links": {
+      "demo": null,
+      "repo": "https://github.com/siyu0209/whaleops-portfolio",
+      "download": null,
+      "docs": "https://github.com/siyu0209/whaleops-portfolio#readme"
+    }
   }
 ]

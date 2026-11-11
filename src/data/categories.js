@@ -16,6 +16,7 @@ export const categoryLabels = {
   opensource: '开源项目',
   desktop: '客户端',
   ai: 'AI 应用',
+  efficiency: '效率工具',
 }
 
 /** 取中文标签；遇到没登记的枚举就退回原值，不让页面出现 undefined */

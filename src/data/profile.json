@@ -2,11 +2,11 @@
   "name": "周涛",
   "nameNote": "2027",
   "role": "Android 客户端 · 音视频 · AI 工具",
-  "tagline": "两个 Android App 和一个 VS Code 扩展，源码和安装包都在 GitHub 上。",
+  "tagline": "两个 Android App、一个 VS Code 扩展，再加一套零依赖的跨境电商运营台，源码和安装包都在 GitHub 上。",
   "status": "2027 届 · 本科在读",
   "statement": "个人作品集",
-  "intro": "这里放三个做完并且发出去的项目：一个聚合多源的 Android 播放器、一个社媒无水印下载器、一个给 Claude Code 做协议转换的 VS Code 扩展。每个都有公开仓库，能直接下载装上试。",
-  "about": "三个项目都不是课程作业，是自己在用、用着不顺手就重写的东西。",
+  "intro": "这里放四个做完并且发出去的项目：一个聚合多源的 Android 播放器、一个社媒无水印下载器、一个给 Claude Code 做协议转换的 VS Code 扩展，还有一套从选品打分管到退货结案的跨境电商运营台。每个都有公开仓库，能直接下载装上试。",
+  "about": "这四个项目都不是课程作业，是自己在用、用着不顺手就重写的东西。",
   "history": [
     {
       "label": "Wixot · 播放器",
@@ -22,6 +22,11 @@
       "label": "Claude Code Relay · 扩展",
       "title": "从「手上只有 OpenAI 格式的中转站」开始",
       "text": "用 Claude Code 的时候，官方客户端只认自家接口，而我手上只有 OpenAI 格式的中转站。于是写了个本地代理做双向转换：请求翻成 Claude Code 认的格式，流式事件再拼回去。后来打包成 VS Code 扩展，换站只改一处配置。"
+    },
+    {
+      "label": "鲸营 WhaleOps · 运营台",
+      "title": "从「跨店铺的数字对不上」开始",
+      "text": "给自己做跨境电商时算不清账：刊登、履约、广告、退货散在四张表里，利润得靠手抄。于是先拆了三个商业工具的底层，再自己搭一套本地运营台：13 个页面共用一套金额口径，27 张表零外键但级联删除有事务保护，抓 Amazon 数据拆成「出口通道」和「解析入库」两层。零依赖，双击 start.cmd 就能跑。"
     }
   ],
   "skills": [
@@ -60,10 +65,13 @@
       "group": "开源与工程化",
       "icon": "branch",
       "items": [
-        { "name": "Git", "icon": "branch", "proof": "两个项目都开在公开仓库，提交按功能切，不带脏历史" },
+        { "name": "Git", "icon": "branch", "proof": "四个项目都开在公开仓库，提交按功能切，不带脏历史" },
         { "name": "问题定位", "icon": "shield", "proof": "发版前批量跑 20 个以上下载任务，无异常才推" },
         { "name": "文档编写", "icon": "book", "proof": "每个仓库写清安装、使用和已知限制" },
-        { "name": "独立交付", "icon": "check", "proof": "需求、开发、打包、发布，三个项目全程一个人" }
+        { "name": "独立交付", "icon": "check", "proof": "需求、开发、打包、发布，四个项目全程一个人" },
+        { "name": "零依赖交付", "icon": "package", "proof": "运营台不装任何 npm 包，node 直接跑，规则是「能不引就不引」" },
+        { "name": "数据口径", "icon": "layers", "proof": "13 个页面的金额共用一套引擎，加一项指标不用改前端" },
+        { "name": "自动化验证", "icon": "shield", "proof": "改完先跑 323 条断言，再逐页量几何有没有溢出" }
       ]
     }
   ],
@@ -84,9 +92,14 @@
       "description": "给 Claude Code 做协议转换的 VS Code 扩展，让它能接 OpenAI 格式的中转站。"
     },
     {
+      "period": "2026",
+      "title": "鲸营 WhaleOps 跨境电商运营台",
+      "description": "13 个页面的本地运营台：选品打分、刊登队列、履约退货、月度损益串成一条链，零第三方依赖。"
+    },
+    {
       "period": "现在",
-      "title": "两个项目开放源码",
-      "description": "Wixot 与拾光的代码和安装包都放到了 GitHub，持续修问题、发新版本。"
+      "title": "四个项目开放源码",
+      "description": "Wixot、拾光、Relay Proxy 与 WhaleOps 的代码都放到了 GitHub，持续修问题、发新版本。"
     }
   ],
   "contact": {
