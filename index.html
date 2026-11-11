@@ -1,0 +1,61 @@
+<!doctype html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="color-scheme" content="dark" />
+    <meta name="theme-color" content="#07080A" />
+
+    <!--
+      标题与描述：这里是静态兜底，路由切换后由 src/utils/seo.js 覆盖。
+      两份文案必须一致，否则爬虫与用户看到的内容会打架。
+    -->
+    <title>周涛 · 技术作品集</title>
+    <meta
+      name="description"
+      content="周涛的个人技术作品集：Android 客户端、FFmpeg 播放内核、VS Code 扩展。2027 届应届生，三个项目从解码到打包发布全程独立完成。"
+    />
+    <meta name="author" content="周涛" />
+
+    <!-- 站点图标：SVG 优先，首字母 Z。/ 由 Vite 替换，子路径部署也不会 404 -->
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="apple-touch-icon" href="/favicon.svg" />
+
+    <!--
+      Open Graph / Twitter：分享卡片。
+      https://siyu0209.github.io/ 由 vite.config.js 在构建期替换成真实站点地址（含子路径），
+      因为大部分平台的爬虫不执行 JS，运行时 seo.js 改的标签它们读不到。
+      构建时注入：$env:VITE_SITE_URL='https://siyu0209.github.io'; $env:BASE_PATH='/portfolio/'; npm run build
+    -->
+    <meta property="og:type" content="website" />
+    <meta property="og:site_name" content="周涛 · 技术作品集" />
+    <meta property="og:locale" content="zh_CN" />
+    <meta property="og:title" content="周涛 · 技术作品集" />
+    <meta
+      property="og:description"
+      content="Android 客户端、FFmpeg 播放内核、VS Code 扩展。2027 届应届生，三个项目从解码到打包发布全程独立完成。"
+    />
+    <meta property="og:url" content="https://siyu0209.github.io/" />
+    <meta property="og:image" content="https://siyu0209.github.io/og-cover.png" />
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="周涛 · 技术作品集：Android 客户端 / 开源音视频 / AI 工具链" />
+
+    <meta name="twitter:card" content="summary_large_image" />
+    <meta name="twitter:title" content="周涛 · 技术作品集" />
+    <meta
+      name="twitter:description"
+      content="Android 客户端、FFmpeg 播放内核、VS Code 扩展。2027 届应届生，三个项目从解码到打包发布全程独立完成。"
+    />
+    <meta name="twitter:image" content="https://siyu0209.github.io/og-cover.png" />
+
+    <link rel="canonical" href="https://siyu0209.github.io/" />
+    <script type="module" crossorigin src="/assets/index-Bl66ojNC.js"></script>
+    <link rel="stylesheet" crossorigin href="/assets/index-ic-gDyp-.css">
+  </head>
+  <body>
+    <!-- Vue 应用挂载点，全站唯一 HTML 入口 -->
+    <div id="app"></div>
+  </body>
+</html>
