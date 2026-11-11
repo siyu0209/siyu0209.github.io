@@ -1,0 +1,23 @@
+{
+  "name": "zhoutao-portfolio",
+  "version": "0.1.0",
+  "private": true,
+  "type": "module",
+  "description": "周涛个人技术作品集官网 · 客户端 / 音视频 / AI 工具",
+  "scripts": {
+    "dev": "vite",
+    "build": "vite build && node scripts/postbuild.mjs",
+    "build:sub": "node scripts/build-sub.mjs",
+    "preview": "vite preview"
+  },
+  "dependencies": {
+    "vue": "^3.5.45",
+    "vue-router": "^4.6.4"
+  },
+  "devDependencies": {
+    "@tailwindcss/vite": "^4.3.5",
+    "@vitejs/plugin-vue": "^6.0.10",
+    "tailwindcss": "^4.3.5",
+    "vite": "^8.3.8"
+  }
+}

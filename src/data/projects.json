@@ -1,0 +1,138 @@
+[
+  {
+    "id": "video-player",
+    "title": "开源视频播放器",
+    "subtitle": "FFmpeg 封装解码，二十多个影视源打包进一个 App",
+    "category": "opensource",
+    "year": 2026,
+    "role": "独立开发：播放内核 / 界面 / 源解析 / 打包",
+    "glyph": "player",
+    "techStack": ["FFmpeg", "自定义播放内核", "影视源解析", "Android", "多线程"],
+    "cover": "/projects/player-cover.jpg",
+    "coverThumb": "/projects/player-cover-thumb.jpg",
+    "gallery": [
+      { "src": "/projects/player-1.jpg", "caption": "主界面" },
+      { "src": "/projects/player-2.jpg", "caption": "片库列表" }
+    ],
+    "summary": "用 FFmpeg 封装解码，内置二十多个影视源，自建播放内核，装上就能看。",
+    "highlights": [
+      "FFmpeg 封装全格式解码，不依赖系统播放器",
+      "二十多个影视源统一解析，按源切换线路",
+      "一个安装包搞定，不装运行时也能看"
+    ],
+    "efficiency": [],
+    "background": "想看片得先找源、再找播放器，两边都不省心：源站给的地址常常要专用播放器才能解，通用播放器又打不开冷门封装。",
+    "difficulty": "源站地址结构各不相同，解析规则一改版就失效；同时播放内核要扛住各种封装和编码，不能一遇到异常码流就整段黑屏。",
+    "solution": "解码交给 FFmpeg，播放内核自己写：解封装、解码、渲染分层，异常码流只影响当前这一路，不影响界面。影视源抽成独立配置，每个源一条解析规则，新增或失效只改配置，不动内核。",
+    "result": "一个 App 里集成了二十多个影视源，冷门封装也能直接播；新增源只要加一条配置，不用重新理解整条播放链路。",
+    "supportPlatforms": ["Android"],
+    "downloadCount": null,
+    "featureList": [
+      "二十多个影视源聚合",
+      "FFmpeg 全格式解码",
+      "按源切换线路",
+      "自定义播放内核",
+      "播放记录与续播"
+    ],
+    "repoStars": null,
+    "contributors": null,
+    "coreModule": ["源解析层", "解封装层", "解码层", "渲染层", "播放内核"],
+    "links": {
+      "demo": null,
+      "repo": null,
+      "download": null,
+      "docs": null
+    }
+  },
+  {
+    "id": "media-downloader",
+    "title": "社媒无水印下载器",
+    "subtitle": "抖音 / B 站批量队列下载，并发不设上限",
+    "category": "desktop",
+    "year": 2026,
+    "role": "独立开发：接口解析 / 队列 / 打包",
+    "glyph": "download",
+    "techStack": ["接口解析", "批量队列", "并发下载", "Android", "单文件打包"],
+    "cover": "/projects/downloader-cover.jpg",
+    "coverThumb": "/projects/downloader-cover-thumb.jpg",
+    "gallery": [
+      { "src": "/projects/downloader-1.jpg", "caption": "任务列表" },
+      { "src": "/projects/downloader-2.jpg", "caption": "解析与下载" },
+      { "src": "/projects/downloader-3.jpg", "caption": "下载设置" }
+    ],
+    "summary": "解析平台接口直取原始媒体流，批量队列并发下载，单文件 67 MB 装上就用。",
+    "highlights": [
+      "直取原始媒体流，不经过二次转码",
+      "并发不设上限，实测一次跑 20+ 任务",
+      "单文件 67 MB，装上就能用"
+    ],
+    "efficiency": [],
+    "background": "网页端能看的视频，下载下来常带水印，或者被压成低码率版本。想要原始文件，只能自己去找接口。",
+    "difficulty": "接口和播放地址经常变，写死的规则活不过一个版本；批量下载时单条失败容易拖垮整批，并发一高又容易触发限速。",
+    "solution": "解析拆成「取页面 → 定位播放信息 → 还原媒体地址」三步，平台改版只动其中一处；下载走任务队列，并发数不设上限但每条任务独立记录进度与失败原因，失败只重试自己。",
+    "result": "拿到的是平台原始媒体流，没有水印与二次压缩；批量 20+ 任务实测无异常，整个 App 打成一个 67 MB 的安装包。",
+    "supportPlatforms": ["Android"],
+    "downloadCount": null,
+    "featureList": [
+      "抖音 / B 站链接解析",
+      "批量队列，并发不设上限",
+      "逐条进度与失败重试",
+      "原画质保存",
+      "单文件安装包"
+    ],
+    "repoStars": null,
+    "contributors": null,
+    "coreModule": [],
+    "links": {
+      "demo": null,
+      "repo": null,
+      "download": null,
+      "docs": null
+    }
+  },
+  {
+    "id": "claude-code-relay",
+    "title": "Claude Code Relay Proxy",
+    "subtitle": "把 OpenAI 格式的中转站接进 Claude Code",
+    "category": "ai",
+    "year": 2026,
+    "role": "独立开发：协议转换 / 扩展 / 发布",
+    "glyph": "ai",
+    "techStack": ["TypeScript", "VS Code API", "协议转换", "OpenAI 兼容格式", "Node.js"],
+    "cover": "/projects/relay-cover.jpg",
+    "coverThumb": "/projects/relay-cover-thumb.jpg",
+    "gallery": [],
+    "summary": "在本地做一层协议转换，把 OpenAI 格式的请求翻成 Claude Code 认的接口。",
+    "highlights": [
+      "OpenAI 格式与 Claude Code 协议双向转换",
+      "支持 OpenAI / Claude / DeepSeek 等中转站",
+      "只在 VS Code 内生效，不接管系统代理"
+    ],
+    "efficiency": [
+      { "label": "扩展版本", "value": "0.1.0", "hint": "" },
+      { "label": "接口格式", "value": "3", "hint": "OpenAI / Claude / DeepSeek" },
+      { "label": "生效范围", "value": "VS Code", "hint": "不改系统代理" }
+    ],
+    "background": "Claude Code 只认自家的接口格式，手上的中转站大多是 OpenAI 格式，两边对不上，只能换回官方额度或者手动改请求。",
+    "difficulty": "两边不只是字段名不同：消息结构、流式返回的事件格式、工具调用的表达方式都不一样，转换错一处，客户端就整段没有响应。",
+    "solution": "在本地起一层代理做双向翻译：进来的 OpenAI 格式拆成 Claude Code 认识的结构，返回的流式事件再拼回去，客户端始终以为自己在跟原服务对话。配置只暴露必要的几项，其余按默认走。",
+    "result": "Claude Code 可以直接连 OpenAI 格式的中转站，切换中转站只改一处配置；扩展只在 VS Code 内生效，不接管系统代理。",
+    "supportPlatforms": ["VS Code"],
+    "downloadCount": null,
+    "featureList": [
+      "不再手动改接口地址",
+      "换中转站不用重装客户端",
+      "协议差异在本地抹平",
+      "流式响应原样透传"
+    ],
+    "repoStars": null,
+    "contributors": null,
+    "coreModule": [],
+    "links": {
+      "demo": null,
+      "repo": null,
+      "download": null,
+      "docs": null
+    }
+  }
+]

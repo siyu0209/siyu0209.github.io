@@ -1,0 +1,229 @@
+/* ============================================================================
+   动效层
+   职责：只放「靠状态切换才会动」的类（滚动揭示、指针辉光）。
+   不在这里定义任何颜色 / 字号 / 间距——那些一律走 tokens.css。
+   ============================================================================ */
+
+/* ----------------------------------------------------------------------------
+   滚动揭示
+   进入视口后从下方 1.5rem 落定，用 reveal 曲线（指数减速）落地。
+   全站入场动画只有这一条时长（--duration-reveal: 560ms）与这一条缓动，
+   组件不许自造时间值——想改节奏只改 tokens.css。
+   只播一次：落定后摘下观察，往回滚不会来回弹。
+   --reveal-delay 由 v-reveal 指令按序号写入，形成阶梯。
+   ---------------------------------------------------------------------------- */
+.reveal {
+  opacity: 0;
+  transform: translate3d(0, 1.5rem, 0);
+  transition:
+    opacity var(--duration-reveal) var(--ease-reveal),
+    transform var(--duration-reveal) var(--ease-reveal);
+  transition-delay: var(--reveal-delay, 0ms);
+}
+
+.reveal.is-revealed {
+  opacity: 1;
+  transform: none;
+}
+
+/* ----------------------------------------------------------------------------
+   指针辉光
+   --mx / --my 是光标在元素内的坐标，由 v-spotlight 指令持续写入。
+   光斑挂在伪元素上并压到内容之后，文字不会被染色。
+   ---------------------------------------------------------------------------- */
+.spotlight {
+  position: relative;
+  isolation: isolate;
+}
+
+.spotlight > * {
+  position: relative;
+  z-index: 1;
+}
+
+.spotlight::before {
+  content: '';
+  position: absolute;
+  inset: 0;
+  z-index: 0;
+  border-radius: inherit;
+  pointer-events: none;
+  opacity: 0;
+  background: radial-gradient(
+    18rem circle at var(--mx, 50%) var(--my, 50%),
+    color-mix(in srgb, var(--color-accent) 12%, transparent),
+    transparent 68%
+  );
+  transition: opacity var(--duration-slow) var(--ease-out-soft);
+}
+
+/* 这里不用 @media (hover: hover) 兜底：带触摸屏的笔记本会把自己报成
+   pointer: coarse / hover: none，加了这层反而让光斑在这类机器上永远不亮。
+   触屏上点一下虽然会留下 hover 态，但条目本身是链接、点了就跳走，不会卡住。 */
+.spotlight:hover::before {
+  opacity: 1;
+}
+
+/* ----------------------------------------------------------------------------
+   项目卡片
+   上浮 4px + 描边提亮 + 封面放大 1.03 倍，三件事同一个时长，看起来是一次动作。
+   同样不套 @media (hover: hover)：带触摸屏的机器会把自己报成 hover: none，
+   加了这层在那种机器上就完全没有反馈了。
+   键盘用户走 :focus-within —— Tab 到整卡链接时，卡片和鼠标悬停时一样亮起来。
+   ---------------------------------------------------------------------------- */
+.project-card {
+  transition:
+    transform var(--duration-base) var(--ease-out-soft),
+    border-color var(--duration-base) var(--ease-out-soft),
+    box-shadow var(--duration-base) var(--ease-out-soft);
+}
+
+.project-card:hover,
+.project-card:focus-within {
+  transform: translate3d(0, -0.25rem, 0);
+  border-color: var(--color-line-strong);
+  box-shadow: var(--shadow-card);
+}
+
+.project-card__visual {
+  transition: transform var(--duration-slower) var(--ease-out-soft);
+}
+
+.project-card:hover .project-card__visual,
+.project-card:focus-within .project-card__visual {
+  transform: scale(1.03);
+}
+
+/* ----------------------------------------------------------------------------
+   项目网格淡入淡出
+   切换分类时先淡出、换完数据再淡回，中间不会出现「卡片凭空跳位」。
+   时长和 HomeView 里的 setTimeout 保持一致（160ms）。
+   ---------------------------------------------------------------------------- */
+.project-grid {
+  transition: opacity var(--duration-base) var(--ease-out-soft);
+}
+
+.project-grid.is-fading {
+  opacity: 0;
+}
+
+/* ----------------------------------------------------------------------------
+   详情页首图与图集缩略图
+   悬停时轻微放大，暗示「这张图能点」。
+   同样不套 @media (hover: hover)，理由与项目卡片一致。
+   ---------------------------------------------------------------------------- */
+.hero-shot__media {
+  transition: transform var(--duration-slower) var(--ease-out-soft);
+}
+
+.hero-shot:hover .hero-shot__media,
+.hero-shot:focus-visible .hero-shot__media {
+  transform: scale(1.02);
+}
+
+.shot-thumb {
+  transition: transform var(--duration-slower) var(--ease-out-soft);
+}
+
+.shot-item:hover .shot-thumb,
+.shot-item:focus-visible .shot-thumb {
+  transform: scale(1.04);
+}
+
+/* ----------------------------------------------------------------------------
+   图片查看层（lightbox）
+   遮罩淡入，图片轻微放大落定；关闭时反向。
+   位移只在 __frame 上做，遮罩本身不做缩放，避免整屏糊成一片。
+   ---------------------------------------------------------------------------- */
+.lightbox-enter-active,
+.lightbox-leave-active {
+  transition: opacity var(--duration-base) var(--ease-out-soft);
+}
+
+.lightbox-enter-from,
+.lightbox-leave-to {
+  opacity: 0;
+}
+
+.lightbox-enter-active .lightbox__frame,
+.lightbox-leave-active .lightbox__frame {
+  transition: transform var(--duration-slow) var(--ease-spring);
+}
+
+.lightbox-enter-from .lightbox__frame,
+.lightbox-leave-to .lightbox__frame {
+  transform: scale(0.97);
+}
+
+/* ----------------------------------------------------------------------------
+   轻提示（Toast）
+   从下方 8px 处淡入上移落定；离开时反向收回。
+   只做位移与透明度，不做缩放——提示是「陈述」而不是「弹出」。
+   ---------------------------------------------------------------------------- */
+.toast-enter-active,
+.toast-leave-active {
+  transition:
+    opacity var(--duration-base) var(--ease-out-soft),
+    transform var(--duration-base) var(--ease-out-soft);
+}
+
+.toast-enter-from,
+.toast-leave-to {
+  opacity: 0;
+  transform: translate3d(0, 0.5rem, 0);
+}
+
+/* ----------------------------------------------------------------------------
+   减弱动效
+   系统开了「减少动态效果」时，一切位移直接归位，只保留颜色变化。
+   ---------------------------------------------------------------------------- */
+@media (prefers-reduced-motion: reduce) {
+  .reveal {
+    opacity: 1;
+    transform: none;
+    transition: none;
+  }
+
+  .spotlight::before {
+    display: none;
+  }
+
+  .project-card,
+  .project-card:hover,
+  .project-card:focus-within {
+    transform: none;
+    transition: border-color var(--duration-base) linear;
+  }
+
+  .project-card__visual,
+  .project-card:hover .project-card__visual,
+  .project-card:focus-within .project-card__visual {
+    transform: none;
+  }
+
+  .project-grid {
+    transition: none;
+  }
+
+  .hero-shot__media,
+  .hero-shot:hover .hero-shot__media,
+  .hero-shot:focus-visible .hero-shot__media,
+  .shot-thumb,
+  .shot-item:hover .shot-thumb,
+  .shot-item:focus-visible .shot-thumb {
+    transform: none;
+  }
+
+  .lightbox-enter-active .lightbox__frame,
+  .lightbox-leave-active .lightbox__frame,
+  .lightbox-enter-from .lightbox__frame,
+  .lightbox-leave-to .lightbox__frame {
+    transform: none;
+    transition: none;
+  }
+
+  .toast-enter-from,
+  .toast-leave-to {
+    transform: none;
+  }
+}

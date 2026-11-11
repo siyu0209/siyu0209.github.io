@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 32 32" width="32" height="32" role="img" aria-label="Z · 周涛">
+  <rect width="32" height="32" rx="7" fill="#0B0D11" />
+  <rect x="0.6" y="0.6" width="30.8" height="30.8" rx="6.4" fill="none" stroke="#29303A" stroke-width="1.2" />
+  <path d="M9.9 9.6h12.2L9.9 22.4h12.2" fill="none" stroke="#F2683C" stroke-width="3.4" stroke-linecap="round" stroke-linejoin="round" />
+</svg>

@@ -1,0 +1,239 @@
+/* ============================================================================
+   设计 Token（Design Tokens）
+   ----------------------------------------------------------------------------
+   职责：全站唯一的「颜色 / 字体 / 字号 / 间距 / 圆角 / 阴影 / 动效」事实来源。
+   约束：组件里禁止出现裸色值（#xxxxxx）和手写像素间距，必须引用本文件的变量
+        或由变量生成的工具类（bg-accent / text-muted / px-gutter ...）。
+   机制：用 Tailwind v4 的 @theme —— 变量既输出为原生 CSS 变量，
+        又自动生成同名工具类，做到「一处定义、两处可用」，不会漂移。
+   换肤：只改第 4 节「语义别名」，组件代码零改动。
+   ============================================================================ */
+
+@import "tailwindcss";
+
+@theme {
+  /* ------------------------------------------------------------------
+     1. 中性色阶
+     偏冷的深灰。蓝色倾向让大块深色不发闷，也让暖色强调更跳。
+     编号越大越深，50 为最亮的近白。
+     ------------------------------------------------------------------ */
+  --color-ink-950: #07080a;
+  --color-ink-900: #0b0d11;
+  --color-ink-850: #0f1217;
+  --color-ink-800: #13171d;
+  --color-ink-750: #181d24;
+  --color-ink-700: #1e242c;
+  --color-ink-600: #29303a;
+  --color-ink-500: #3a424e;
+  --color-ink-400: #6f7a88;
+  --color-ink-300: #818c9b;
+  --color-ink-200: #aab4c1;
+  --color-ink-100: #d4dae2;
+  --color-ink-50: #eef2f6;
+
+  /* ------------------------------------------------------------------
+     2. 强调色（主色）
+     「录制红橙」：取自视频播放器的录制指示灯，与你的音视频项目同源。
+     克制造点：只用于主按钮、当前态、关键数字、下划线、焦点环。
+     ------------------------------------------------------------------ */
+  --color-accent-600: #c94e21;
+  --color-accent-500: #f2683c;
+  --color-accent-400: #ff8259;
+  --color-accent-100: #4a1f10;
+
+  /* ------------------------------------------------------------------
+     3. 技术色（辅助色）
+     冷青：用于标签、代码、链接、状态点、次要图形。
+     与暖橙形成冷暖对峙，避免整站「一片橙」的廉价感。
+     ------------------------------------------------------------------ */
+  --color-tech-600: #2b8b84;
+  --color-tech-500: #45b3ab;
+  --color-tech-400: #63cbc3;
+  --color-tech-100: #12332f;
+
+  /* ------------------------------------------------------------------
+     4. 语义别名 —— 组件只准用这一层
+     ------------------------------------------------------------------ */
+  --color-canvas: var(--color-ink-950);
+  --color-surface: var(--color-ink-900);
+  --color-surface-raised: var(--color-ink-850);
+  --color-surface-hover: var(--color-ink-800);
+
+  /* 描边：line-* 而不是 border-*，避免出现 border-border 这种双词类名 */
+  --color-line-subtle: var(--color-ink-750);
+  --color-line: var(--color-ink-700);
+  --color-line-strong: var(--color-ink-600);
+
+  /* 文字：fg-* 而不是 text-*，避免出现 text-text-primary 这种双前缀 */
+  --color-fg: var(--color-ink-50);
+  --color-fg-secondary: var(--color-ink-200);
+  --color-fg-muted: var(--color-ink-300);
+  --color-fg-faint: var(--color-ink-400);
+  --color-fg-inverse: var(--color-ink-950);
+
+  --color-accent: var(--color-accent-500);
+  --color-accent-hover: var(--color-accent-400);
+  --color-accent-contrast: #1a0b06;
+  --color-tech: var(--color-tech-500);
+  --color-tech-soft: var(--color-tech-100);
+
+  /* ------------------------------------------------------------------
+     5. 字体
+     不引任何外链字体（静态站要能离线跑、首屏不被字体阻塞）。
+     Windows / macOS / Linux 都能命中栈内至少一项。
+     ------------------------------------------------------------------ */
+  --font-sans: "PingFang SC", "HarmonyOS Sans SC", "Source Han Sans SC",
+    "Noto Sans CJK SC", "Microsoft YaHei", system-ui, -apple-system,
+    "Segoe UI", Roboto, sans-serif;
+  --font-mono: "JetBrains Mono", "Cascadia Mono", "Cascadia Code", "SF Mono",
+    Consolas, "Liberation Mono", monospace;
+
+  /* ------------------------------------------------------------------
+     6. 字号阶梯
+     每档绑定行高与字距，组件里只写 text-xl，不再散落 leading-* / tracking-*。
+     ------------------------------------------------------------------ */
+  --text-xs: 0.75rem;
+  --text-xs--line-height: 1.6;
+  --text-xs--letter-spacing: 0.02em;
+
+  --text-sm: 0.8125rem;
+  --text-sm--line-height: 1.65;
+
+  --text-base: 0.9375rem;
+  --text-base--line-height: 1.75;
+
+  --text-md: 1rem;
+  --text-md--line-height: 1.7;
+
+  --text-lg: 1.125rem;
+  --text-lg--line-height: 1.6;
+
+  --text-xl: 1.375rem;
+  --text-xl--line-height: 1.45;
+
+  --text-2xl: 1.75rem;
+  --text-2xl--line-height: 1.3;
+
+  --text-3xl: 2.25rem;
+  --text-3xl--line-height: 1.25;
+
+  --text-4xl: 3rem;
+  --text-4xl--line-height: 1.15;
+
+  --text-5xl: 4rem;
+  --text-5xl--line-height: 1.05;
+
+  /* 光学字号（optical sizing）：标题随视口流体缩放，不再是断点跳档。
+     上限 3.25rem 保证在 2 行时仍是「一句口号」的体量，不会糊成一面墙。 */
+  --text-display: clamp(2.25rem, 4.6vw, 3.25rem);
+  --text-display--line-height: 1.14;
+
+  /* ------------------------------------------------------------------
+     7. 间距
+     保留 Tailwind 默认 4px 栅格（p-1 ~ p-96），再加 4 个语义档位。
+     ------------------------------------------------------------------ */
+  --spacing-gutter-sm: 1rem;
+  --spacing-gutter: 1.5rem;
+  --spacing-section-sm: 4.5rem;
+  --spacing-section: 7rem;
+
+  /* ------------------------------------------------------------------
+     8. 容器宽度（生成 max-w-page / max-w-prose）
+     ------------------------------------------------------------------ */
+  /* 76rem 时，左侧身份栏吃掉 320px 后每张项目卡只剩 229px，三列挤成了缩略图；
+     放到 82rem，1440 视口下卡片约 261px，同时正文段落仍由 max-w-content 兜住行宽 */
+  --container-page: 82rem;
+  --container-prose: 46rem;
+  /* 正文栏宽度：右侧滚动区的内容不铺满，控制在易读行宽内 */
+  --container-content: 42rem;
+  /* 长文行宽：68ch。
+     ch 是「0」的宽度，西文约等于半角字符宽，所以 68ch ≈ 68 个西文字符；
+     中文一个字约占 2ch，落在每行 34 字左右，正好是中文长文最舒服的区间
+     （常见排版建议 30–40 字/行）。 */
+  --container-measure: 68ch;
+
+  /* ------------------------------------------------------------------
+     9. 圆角
+     ------------------------------------------------------------------ */
+  --radius-xs: 3px;
+  --radius-sm: 6px;
+  --radius-md: 10px;
+  --radius-lg: 14px;
+  --radius-xl: 20px;
+  --radius-full: 9999px;
+
+  /* ------------------------------------------------------------------
+     10. 阴影
+     深色界面靠「内高光 + 大范围柔影」建立层级，不用重投影压黑画面。
+     ------------------------------------------------------------------ */
+  --shadow-card: inset 0 1px 0 0 rgb(255 255 255 / 0.04),
+    0 10px 30px -18px rgb(0 0 0 / 0.9);
+  --shadow-float: inset 0 1px 0 0 rgb(255 255 255 / 0.06),
+    0 24px 60px -28px rgb(0 0 0 / 0.95);
+  --shadow-focus: 0 0 0 2px var(--color-canvas),
+    0 0 0 4px var(--color-accent-500);
+
+  /* ------------------------------------------------------------------
+     11. 动效
+     组件只引用这 4 个时长 + 2 条缓动，禁止局部自造时间值。
+     ------------------------------------------------------------------ */
+  --duration-fast: 120ms;
+  --duration-base: 200ms;
+  --duration-slow: 320ms;
+  --duration-slower: 520ms;
+
+  --ease-out-soft: cubic-bezier(0.22, 1, 0.36, 1);
+  --ease-in-out-soft: cubic-bezier(0.65, 0, 0.35, 1);
+
+  /* 弹簧缓动：参数取自 Apple 流体设计的物理映射
+     spring —— 入场 / 弹出，末段有极轻的回弹感
+     reveal —— 滚动入场，指数减速，停下来时没有生硬的刹车感 */
+  --ease-spring: cubic-bezier(0.32, 0.72, 0, 1);
+  --ease-reveal: cubic-bezier(0.16, 1, 0.3, 1);
+
+  --duration-spring: 420ms;
+
+  /* 滚动入场：全站唯一一条「元素自己动」的时长，卡在 600ms 以内。
+     比它长的落定会让人等，比它短又看不出「从下方来」的方向感。 */
+  --duration-reveal: 560ms;
+}
+
+/* ----------------------------------------------------------------------------
+   动效时长工具类
+   Tailwind v4 没有 --duration-* 主题命名空间（duration-* 只认裸数字），
+   这里用 @utility 把 token 补成工具类，保证组件里不出现 duration-[320ms] 这种魔法值。
+
+   两条都要写：
+   transition-* 系列工具类把时长读成 var(--tw-duration, 默认值)，
+   只写 transition-duration 会跟它抢同一个属性，谁生效取决于产出顺序；
+   同时写 --tw-duration 才是顺序无关的。
+   ---------------------------------------------------------------------------- */
+@utility duration-fast {
+  --tw-duration: var(--duration-fast);
+  transition-duration: var(--duration-fast);
+}
+
+@utility duration-base {
+  --tw-duration: var(--duration-base);
+  transition-duration: var(--duration-base);
+}
+
+@utility duration-slow {
+  --tw-duration: var(--duration-slow);
+  transition-duration: var(--duration-slow);
+}
+
+@utility duration-slower {
+  --tw-duration: var(--duration-slower);
+  transition-duration: var(--duration-slower);
+}
+
+@utility duration-spring {
+  --tw-duration: var(--duration-spring);
+  transition-duration: var(--duration-spring);
+}
+
+@utility duration-reveal {
+  --tw-duration: var(--duration-reveal);
+  transition-duration: var(--duration-reveal);
+}
