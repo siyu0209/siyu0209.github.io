@@ -53,9 +53,12 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 │   ├── og-cover.png                分享卡片封面：1200×630
 │   ├── resume.pdf                  简历 PDF：首屏 / 左栏 / 联系区三处共用同一个文件
 │   └── projects/                   项目截图与微信二维码（已合成 1600×1000 的画布图）
+├── resume-src/
+│   └── resume.html             简历源文件：改文字改这里，再由脚本渲染成 PDF
 ├── scripts/
 │   ├── postbuild.mjs           构建后处理：生成 404.html + .nojekyll（GitHub Pages 深链接回落）
 │   ├── build-sub.mjs           子路径构建：BASE_PATH=/仓库名/ 时用
+│   ├── build-resume.ps1        简历渲染：resume-src/resume.html → public/resume.pdf（调本机 Chrome）
 │   └── publish.ps1             一键发布到 GitHub Pages（构建 → 推 main 与 gh-pages → 触发 Pages）
 └── src/
     ├── main.js                 应用入口：创建实例 → 注册指令 → 挂路由 → 挂载；按序引入全局样式
@@ -178,10 +181,22 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 
 简历是 `public/resume.pdf` 一个文件，全站三个入口共用它：首屏「下载简历」按钮、左栏 / 页脚的联系方式行、联系区的 Resume 卡片。
 
+**想改简历里的字**：源文件在 `resume-src/resume.html`，改完在项目根目录跑
+
+```bash
+powershell -NoProfile -ExecutionPolicy Bypass -File scripts/build-resume.ps1
+```
+
+脚本会调本机装的 Chrome（没有就用 Edge）把 HTML 印成 A4 单页 PDF，直接覆盖 `public/resume.pdf`，打印出来是「简历已更新：public/resume.pdf 226,445 字节」。
+
+**只想换一份现成 PDF**：
+
 1. 用同名文件覆盖 `public/resume.pdf`（**文件名不要改**，改了要同步改 `src/data/profile.json` 的 `contact.resume`）。
 2. 下载时的文件名由 `src/data/contact.js` 的 `contactResumeFileName` 决定，当前是 `周涛-简历.pdf`——HR 存到桌面能认出是谁的。
 3. 想临时下线简历：把 `profile.json` 的 `contact.resume` 改成 `null`，三处入口同时消失，不会留死链。
 4. 体积建议 ≤ 1 MB。PDF 只在点击时下载，不占首屏体积，但太大在手机上打开会卡。
+
+> 排版红线：`resume.html` 的正文是 10.4pt / 行高 1.48 / 页边距 11mm 14mm 9mm，一套刚好占满一张 A4（正文高 1075 px，A4 上限 1123 px）。**加内容前先看还会不会溢出**，溢出就会变两页——把字号调到 10.2pt 或删掉一条 bullet 再跑脚本。
 
 ### 详情页的七个区块（从上到下）
 
