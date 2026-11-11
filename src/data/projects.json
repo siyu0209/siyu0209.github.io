@@ -1,92 +1,93 @@
 [
   {
     "id": "video-player",
-    "title": "开源视频播放器",
-    "subtitle": "FFmpeg 封装解码，二十多个影视源打包进一个 App",
+    "title": "Wixot 开源视频播放器",
+    "subtitle": "多源聚合搜索 + HLS 反代，2.5 MB 的纯 Java 播放器",
     "category": "opensource",
     "year": 2026,
-    "role": "独立开发：播放内核 / 界面 / 源解析 / 打包",
+    "role": "独立开发：聚合搜索 / HLS 反代 / 界面 / 打包",
     "glyph": "player",
-    "techStack": ["FFmpeg", "自定义播放内核", "影视源解析", "Android", "多线程"],
+    "techStack": ["Java", "WebView", "Apple CMS 聚合", "HLS 反代", "Android"],
     "cover": "/projects/player-cover.jpg",
     "coverThumb": "/projects/player-cover-thumb.jpg",
     "gallery": [
-      { "src": "/projects/player-1.jpg", "caption": "主界面" },
-      { "src": "/projects/player-2.jpg", "caption": "片库列表" }
+      { "src": "/projects/player-1.jpg", "caption": "播放页面" },
+      { "src": "/projects/player-2.jpg", "caption": "设置配置" },
+      { "src": "/projects/player-3.jpg", "caption": "个人主页" }
     ],
-    "summary": "用 FFmpeg 封装解码，内置二十多个影视源，自建播放内核，装上就能看。",
+    "summary": "纯 Java + WebView 写的 Android 播放器：聚合多个 Apple CMS 源做搜索，播放走本地 HLS 反代，安装包只有 2.5 MB。",
     "highlights": [
-      "FFmpeg 封装全格式解码，不依赖系统播放器",
-      "二十多个影视源统一解析，按源切换线路",
-      "一个安装包搞定，不装运行时也能看"
+      "多源 Apple CMS 聚合搜索，一次输入同时查多个源",
+      "HLS 播放走本地反代，绕开源站的跨域与 Referer 校验",
+      "纯 Java + WebView 实现，安装包 2.5 MB，无重型解码库"
     ],
     "efficiency": [],
-    "background": "想看片得先找源、再找播放器，两边都不省心：源站给的地址常常要专用播放器才能解，通用播放器又打不开冷门封装。",
-    "difficulty": "源站地址结构各不相同，解析规则一改版就失效；同时播放内核要扛住各种封装和编码，不能一遇到异常码流就整段黑屏。",
-    "solution": "解码交给 FFmpeg，播放内核自己写：解封装、解码、渲染分层，异常码流只影响当前这一路，不影响界面。影视源抽成独立配置，每个源一条解析规则，新增或失效只改配置，不动内核。",
-    "result": "一个 App 里集成了二十多个影视源，冷门封装也能直接播；新增源只要加一条配置，不用重新理解整条播放链路。",
-    "supportPlatforms": ["Android"],
+    "background": "找片得先知道有哪些源站，再一个站一个站去搜；很多源站的播放地址还带跨域和防盗链，直接把地址丢给播放器会被拦下来。",
+    "difficulty": "各家的 Apple CMS 接口看起来一样，实际字段和鉴权都有出入；播放地址跨域、带 Referer 校验，交给系统播放器直接播不出来；包体还得压住，不能为了播个视频塞进几十兆的运行时。",
+    "solution": "搜索层把多个 Apple CMS 源抽成统一查询，结果合并去重后一起返回；播放层在本地起一层 HLS 反代，给分片请求补上正确的头部再转发给播放器；界面用 WebView 承载，业务逻辑用纯 Java 写，不引重型解码库。",
+    "result": "一个 2.5 MB 的安装包，装完就能多源搜索并直接播放；反代让原本被跨域拦住的源也能正常播，换源只改一条配置。",
+    "supportPlatforms": ["Android 7.0+"],
     "downloadCount": null,
     "featureList": [
-      "二十多个影视源聚合",
-      "FFmpeg 全格式解码",
-      "按源切换线路",
-      "自定义播放内核",
-      "播放记录与续播"
+      "多源聚合搜索",
+      "HLS 反代播放",
+      "播放页面与剧集列表",
+      "个人主页与收藏",
+      "设置项可配置"
     ],
     "repoStars": null,
     "contributors": null,
-    "coreModule": ["源解析层", "解封装层", "解码层", "渲染层", "播放内核"],
+    "coreModule": ["聚合搜索层", "源适配层", "HLS 反代", "WebView 容器", "播放页"],
     "links": {
       "demo": null,
-      "repo": null,
-      "download": null,
+      "repo": "https://github.com/siyu0209/Wixot",
+      "download": "https://github.com/siyu0209/Wixot/releases/latest/download/Wixot-5.2.0.apk",
       "docs": null
     }
   },
   {
     "id": "media-downloader",
-    "title": "社媒无水印下载器",
-    "subtitle": "抖音 / B 站批量队列下载，并发不设上限",
+    "title": "拾光 ShiGuang",
+    "subtitle": "抖音 / B 站无水印批量下载，内置 yt-dlp + FFmpeg",
     "category": "desktop",
     "year": 2026,
-    "role": "独立开发：接口解析 / 队列 / 打包",
+    "role": "独立开发：链接解析 / 队列 / 打包",
     "glyph": "download",
-    "techStack": ["接口解析", "批量队列", "并发下载", "Android", "单文件打包"],
+    "techStack": ["Python", "yt-dlp", "FFmpeg", "Android", "单文件打包"],
     "cover": "/projects/downloader-cover.jpg",
     "coverThumb": "/projects/downloader-cover-thumb.jpg",
     "gallery": [
-      { "src": "/projects/downloader-1.jpg", "caption": "任务列表" },
-      { "src": "/projects/downloader-2.jpg", "caption": "解析与下载" },
-      { "src": "/projects/downloader-3.jpg", "caption": "下载设置" }
+      { "src": "/projects/downloader-1.jpg", "caption": "解析历史" },
+      { "src": "/projects/downloader-2.jpg", "caption": "解析样图" },
+      { "src": "/projects/downloader-3.jpg", "caption": "设置页面" }
     ],
-    "summary": "解析平台接口直取原始媒体流，批量队列并发下载，单文件 67 MB 装上就用。",
+    "summary": "把 yt-dlp、FFmpeg 和 Python 运行时一起打进安装包，装上就能解析抖音 / B 站链接并批量下载原画质。",
     "highlights": [
-      "直取原始媒体流，不经过二次转码",
-      "并发不设上限，实测一次跑 20+ 任务",
-      "单文件 67 MB，装上就能用"
+      "内置 yt-dlp + FFmpeg + Python，不装环境也能直接跑",
+      "解析与下载分离，历史记录留得住，失败只重试单条",
+      "直取平台原始媒体流，无水印、无二次压缩"
     ],
     "efficiency": [],
-    "background": "网页端能看的视频，下载下来常带水印，或者被压成低码率版本。想要原始文件，只能自己去找接口。",
-    "difficulty": "接口和播放地址经常变，写死的规则活不过一个版本；批量下载时单条失败容易拖垮整批，并发一高又容易触发限速。",
-    "solution": "解析拆成「取页面 → 定位播放信息 → 还原媒体地址」三步，平台改版只动其中一处；下载走任务队列，并发数不设上限但每条任务独立记录进度与失败原因，失败只重试自己。",
-    "result": "拿到的是平台原始媒体流，没有水印与二次压缩；批量 20+ 任务实测无异常，整个 App 打成一个 67 MB 的安装包。",
-    "supportPlatforms": ["Android"],
+    "background": "网页端能看的视频，下载下来常带水印，或者被压成低码率版本；想在手机上批量存原片，得先有 Python 环境再自己拼命令。",
+    "difficulty": "平台接口和播放地址一直在变，规则写死活不过一个版本；手机上又没有 Python 和 FFmpeg 环境，要把整条工具链塞进一个安装包，包体和启动速度都得控住。",
+    "solution": "解析拆成「取链接 → 定位媒体信息 → 还原原始地址」三步，平台改版只动其中一处；下载走任务队列，每条任务独立记录进度与失败原因，失败只重试自己；yt-dlp、FFmpeg 与 Python 运行时一起打包进 APK，首次启动解压到私有目录后再调用。",
+    "result": "拿到的是平台原始媒体流，没有水印与二次压缩；批量任务实测无异常，整个工具链打进一个 67 MB 的安装包，不装任何环境。",
+    "supportPlatforms": ["Android 8.0+", "arm64-v8a"],
     "downloadCount": null,
     "featureList": [
       "抖音 / B 站链接解析",
-      "批量队列，并发不设上限",
-      "逐条进度与失败重试",
+      "批量队列与逐条进度",
+      "解析历史可回看",
       "原画质保存",
-      "单文件安装包"
+      "内置 yt-dlp + FFmpeg"
     ],
     "repoStars": null,
     "contributors": null,
     "coreModule": [],
     "links": {
       "demo": null,
-      "repo": null,
-      "download": null,
+      "repo": "https://github.com/siyu0209/ShiGuang",
+      "download": "https://github.com/siyu0209/ShiGuang/releases/latest/download/ShiGuang-1.0.0-debug.apk",
       "docs": null
     }
   },
@@ -101,7 +102,9 @@
     "techStack": ["TypeScript", "VS Code API", "协议转换", "OpenAI 兼容格式", "Node.js"],
     "cover": "/projects/relay-cover.jpg",
     "coverThumb": "/projects/relay-cover-thumb.jpg",
-    "gallery": [],
+    "gallery": [
+      { "src": "/projects/relay-1.jpg", "caption": "对话页" }
+    ],
     "summary": "在本地做一层协议转换，把 OpenAI 格式的请求翻成 Claude Code 认的接口。",
     "highlights": [
       "OpenAI 格式与 Claude Code 协议双向转换",
