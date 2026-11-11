@@ -11,8 +11,8 @@
     "cover": "/projects/player-cover.jpg",
     "coverThumb": "/projects/player-cover-thumb.jpg",
     "gallery": [
-      { "src": "/projects/player-1.jpg", "caption": "播放页面" },
-      { "src": "/projects/player-2.jpg", "caption": "设置配置" },
+      { "src": "/projects/player-1.jpg", "caption": "主页面" },
+      { "src": "/projects/player-2.jpg", "caption": "播放页面" },
       { "src": "/projects/player-3.jpg", "caption": "个人主页" }
     ],
     "summary": "纯 Java + WebView 写的 Android 播放器：聚合多个 Apple CMS 源做搜索，播放走本地 HLS 反代，安装包只有 2.5 MB。",

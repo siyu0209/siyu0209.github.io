@@ -24,9 +24,6 @@ import ContactPanel from '@/components/ContactPanel.vue'
 import AppIcon from '@/components/AppIcon.vue'
 import { contactResume, contactResumeFileName } from '@/data/contact.js'
 
-// 目标岗位：和 profile.json 里的 role 呼应，但这里给全量清单
-const targetRoles = ['前端开发', '客户端开发', '工具开发', 'AI 应用开发']
-
 /* ------------------------------------------------------------------
    项目筛选
    visibleProjects 是「真正参与渲染」的列表，和 activeCategory 分开存：
@@ -61,22 +58,19 @@ onBeforeUnmount(() => window.clearTimeout(fadeTimer))
   <div>
     <!-- ============ 首屏：一句话定位 ============ -->
     <section class="pt-10 lg:pt-0">
+      <!-- 眉标：一行极小的英文，把「这是什么页面」说清楚，避免大字孤零零地悬着 -->
+      <p class="font-mono text-xs uppercase tracking-[0.18em] text-fg-faint">
+        Portfolio · 2026
+      </p>
+
       <!-- text-balance：标题折成两行时自动拉平两行长度，避免末行只剩三四个字 -->
-      <h1 class="max-w-content text-balance text-display font-semibold text-fg">
+      <h1 class="mt-4 max-w-content text-balance text-display font-semibold text-fg">
         {{ profile.statement }}
       </h1>
 
       <p class="mt-6 max-w-content text-base leading-relaxed text-fg-muted">
         {{ profile.intro }}
       </p>
-
-      <!-- 目标岗位：HR 最先想看的一行，所以放在首屏而不是关于区 -->
-      <ul class="mt-7 flex flex-wrap items-center gap-x-3 gap-y-2">
-        <li class="font-mono text-xs text-fg-faint">求职方向</li>
-        <li v-for="role in targetRoles" :key="role" class="font-mono text-xs text-tech">
-          {{ role }}
-        </li>
-      </ul>
 
       <!--
         首屏操作：只给两个真正会被点的落点。
@@ -151,15 +145,17 @@ onBeforeUnmount(() => window.clearTimeout(fadeTimer))
         {{ profile.about }}
       </p>
 
-      <ul class="mt-8 space-y-4">
+      <!-- 三个项目的来历：比抽象的原则更像人话，也让面试官知道你为什么做这些 -->
+      <ul class="mt-8 space-y-7">
         <li
-          v-for="(item, i) in profile.principles"
-          :key="i"
+          v-for="(item, i) in profile.history"
+          :key="item.label"
           v-reveal="i * 70"
-          class="flex gap-4 border-l border-line pl-4"
+          class="border-l border-line pl-4 sm:pl-5"
         >
-          <span class="font-mono text-xs text-accent">{{ String(i + 1).padStart(2, '0') }}</span>
-          <span class="text-sm text-fg-secondary">{{ item }}</span>
+          <p class="font-mono text-xs text-accent">{{ item.label }}</p>
+          <h3 class="mt-2 text-base font-medium text-fg">{{ item.title }}</h3>
+          <p class="mt-2 max-w-content text-sm leading-relaxed text-fg-muted">{{ item.text }}</p>
         </li>
       </ul>
     </section>
@@ -174,10 +170,6 @@ onBeforeUnmount(() => window.clearTimeout(fadeTimer))
     <!-- ============ 联系 ============ -->
     <section id="contact" class="mt-section-sm lg:mt-section">
       <SectionHeading v-reveal index="05" title="联系" eyebrow="Contact" />
-
-      <p v-reveal class="max-w-content text-base leading-relaxed text-fg-muted">
-        2027 届，正在找前端 / 客户端 / 工具开发 / AI 应用方向的岗位。简历和项目源码可以随时发你。
-      </p>
 
       <div v-reveal="60" class="mt-7">
         <ContactPanel />

@@ -1,56 +1,68 @@
 {
   "name": "周涛",
   "nameNote": "2027",
-  "role": "客户端开发 / 前端开发 / 工具开发",
-  "tagline": "Android 客户端、FFmpeg 播放内核、VS Code 扩展。",
-  "status": "2027 届 · 开放投递",
-  "statement": "自己写，自己打包，自己发布。",
-  "intro": "我是周涛，2027 届应届生。做过三个项目：一个基于 FFmpeg 封装的 Android 视频播放器，内置二十多个影视源；一个支持批量队列的社媒无水印下载器，单文件 67 MB 直接安装；还有一个把 OpenAI 格式转成 Claude Code 接口的 VS Code 扩展。我的习惯是先把东西跑通，再把它打包成别人装上就能用的样子。",
-  "about": "我不算科班出身。从 Python 脚本起手，先把重复劳动写成工具；后来做客户端，把脚本收进界面里；现在做开源播放器和 AI 工具链。路线只有一条：先让它跑起来，再让它跑得稳，最后做成别人拿去就能用的完整产品。",
-  "principles": [
-    "先让它跑起来，再让它跑得好。半成品不上桌。",
-    "能一个人交付的，就不拆成三个人对接。",
-    "工具的价值在「少点几下」，不在「多一个功能」。"
+  "role": "Android 客户端 · 音视频 · AI 工具",
+  "tagline": "两个 Android App 和一个 VS Code 扩展，源码和安装包都在 GitHub 上。",
+  "status": "2027 届 · 本科在读",
+  "statement": "个人作品集",
+  "intro": "这里放三个做完并且发出去的项目：一个聚合多源的 Android 播放器、一个社媒无水印下载器、一个给 Claude Code 做协议转换的 VS Code 扩展。每个都有公开仓库，能直接下载装上试。",
+  "about": "三个项目都不是课程作业，是自己在用、用着不顺手就重写的东西。",
+  "history": [
+    {
+      "label": "Wixot · 播放器",
+      "title": "从「片源失效」开始",
+      "text": "最早只是想在自己的手机上把片看完。找来的源站隔一阵就换域名，播放器跟着一个个失效，于是把聚合搜索和 HLS 反代做进 App 里：源站换了，改一处配置就行，不用重新找播放器。现在它 2.5 MB，纯 Java + WebView，装上就能用。"
+    },
+    {
+      "label": "拾光 ShiGuang · 下载器",
+      "title": "从「想要不带水印的原片」开始",
+      "text": "试过几个在线解析站，要么限次数要么满是广告，索性自己写：内置 yt-dlp 与 FFmpeg，抖音和 B 站的链接粘进去就进队列，批量跑完自动落到相册。为了不给用户装环境，把运行时一起打进包里，成品 67 MB 单文件。"
+    },
+    {
+      "label": "Claude Code Relay · 扩展",
+      "title": "从「手上只有 OpenAI 格式的中转站」开始",
+      "text": "用 Claude Code 的时候，官方客户端只认自家接口，而我手上只有 OpenAI 格式的中转站。于是写了个本地代理做双向转换：请求翻成 Claude Code 认的格式，流式事件再拼回去。后来打包成 VS Code 扩展，换站只改一处配置。"
+    }
   ],
   "skills": [
     {
       "group": "客户端与音视频",
       "icon": "monitor",
       "items": [
-        { "name": "FFmpeg", "icon": "film", "proof": "封装全格式解码，播放内核自己写，不依赖系统播放器" },
+        { "name": "FFmpeg", "icon": "film", "proof": "用 FFmpeg 做全格式解码，绕开系统播放器的格式限制" },
         { "name": "播放内核", "icon": "layers", "proof": "解码、缓冲、渲染分层，换源只动取流这一层" },
-        { "name": "Android 客户端", "icon": "monitor", "proof": "播放器与下载器两个 App 都是自己写、自己打包" },
-        { "name": "打包发布", "icon": "package", "proof": "下载器单文件 67 MB，装上就能用，不用配环境" },
-        { "name": "多线程与并发", "icon": "cpu", "proof": "批量下载并发不设上限，实测一次跑 20+ 任务" }
+        { "name": "Android 客户端", "icon": "monitor", "proof": "两个 App 从界面到签名打包，全流程自己走完" },
+        { "name": "打包发布", "icon": "package", "proof": "下载器单文件 67 MB，装完就能用，不用另外配环境" },
+        { "name": "多线程与并发", "icon": "cpu", "proof": "批量下载并发不设上限，实测一次跑 20 个以上任务" }
       ]
     },
     {
       "group": "前端开发",
       "icon": "component",
       "items": [
-        { "name": "Vue 3", "icon": "component", "proof": "本站整站手写，Composition API，没有用组件库" },
-        { "name": "TypeScript", "icon": "type", "proof": "VS Code 扩展用 TS 写，接口字段改动先炸编译" },
-        { "name": "Tailwind CSS", "icon": "wind", "proof": "全站样式由设计 token 驱动，颜色与间距不散落" },
-        { "name": "响应式布局", "icon": "layout", "proof": "同一套组件在 375 / 768 / 1440 三档逐页验过" }
+        { "name": "Vue 3", "icon": "component", "proof": "用 Composition API 拆组件与数据流，路由、动效、响应式按模块组织" },
+        { "name": "TypeScript", "icon": "type", "proof": "扩展用 TS 写，接口字段一改，编译期就报错" },
+        { "name": "Tailwind CSS", "icon": "wind", "proof": "样式由设计 token 驱动，颜色、间距、字号不散落在组件里" },
+        { "name": "响应式布局", "icon": "layout", "proof": "同一套组件在 375 / 768 / 1440 三档逐页验过，没有横向溢出" }
       ]
     },
     {
       "group": "协议与 AI 工具",
       "icon": "plug",
       "items": [
-        { "name": "协议转换", "icon": "plug", "proof": "把 OpenAI 格式的请求转成 Claude Code 能用的接口" },
-        { "name": "接口对接", "icon": "external", "proof": "兼容 OpenAI / Claude / DeepSeek 等格式的中转站" },
+        { "name": "协议转换", "icon": "plug", "proof": "把 OpenAI 格式的请求转成 Claude Code 认的接口，流式事件再拼回去" },
+        { "name": "接口对接", "icon": "external", "proof": "接过 OpenAI / Claude / DeepSeek 几种格式的中转站" },
         { "name": "VS Code 扩展", "icon": "plugin", "proof": "扩展 zhoutao.claude-code-relay 已发布 0.1.0" },
-        { "name": "源解析", "icon": "inbox", "proof": "播放器聚合二十多个影视源，按源解析后取流播放" }
+        { "name": "源解析", "icon": "inbox", "proof": "播放器聚合二十多个影视源，每个源一条解析规则" }
       ]
     },
     {
       "group": "开源与工程化",
       "icon": "branch",
       "items": [
-        { "name": "Git", "icon": "branch", "proof": "播放器与下载器都以公开仓库发布，提交按功能切" },
-        { "name": "问题定位", "icon": "shield", "proof": "下载器批量 20+ 任务实测无异常才发版" },
-        { "name": "文档编写", "icon": "book", "proof": "每个仓库写清安装、使用与已知限制" },
+        { "name": "Git", "icon": "branch", "proof": "两个项目都开在公开仓库，提交按功能切，不带脏历史" },
+        { "name": "问题定位", "icon": "shield", "proof": "发版前批量跑 20 个以上下载任务，无异常才推" },
+        { "name": "文档编写", "icon": "book", "proof": "每个仓库写清安装、使用和已知限制" },
         { "name": "独立交付", "icon": "check", "proof": "需求、开发、打包、发布，三个项目全程一个人" }
       ]
     }
@@ -58,13 +70,13 @@
   "timeline": [
     {
       "period": "2026",
-      "title": "开源视频播放器",
-      "description": "用 FFmpeg 封装解码，把二十多个影视源打包进一个 App，装上就能看。"
+      "title": "Wixot 视频播放器",
+      "description": "聚合二十多个影视源，HLS 本地反代解决跨域与防盗链，2.5 MB 纯 Java 实现。"
     },
     {
       "period": "2026",
-      "title": "社媒无水印下载器",
-      "description": "支持抖音 / B 站的批量队列下载，并发不设上限，单文件 67 MB 直接安装。"
+      "title": "拾光 ShiGuang",
+      "description": "抖音 / B 站无水印批量下载，内置 yt-dlp 与 FFmpeg，67 MB 单文件安装包。"
     },
     {
       "period": "2026",
@@ -73,8 +85,8 @@
     },
     {
       "period": "现在",
-      "title": "两个客户端项目开源",
-      "description": "播放器与下载器的代码正在公开，2027 届，找客户端 / 前端 / 工具开发方向的机会。"
+      "title": "两个项目开放源码",
+      "description": "Wixot 与拾光的代码和安装包都放到了 GitHub，持续修问题、发新版本。"
     }
   ],
   "contact": {

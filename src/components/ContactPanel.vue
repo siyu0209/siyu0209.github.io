@@ -105,8 +105,14 @@ async function copyEmail() {
       </section>
     </div>
 
-    <!-- 微信二维码：有图渲染图，没图留位置 -->
-    <section class="rounded-lg border border-line-subtle bg-surface p-5">
+    <!--
+      微信二维码：有图渲染图，没图留位置。
+      卡片在任何宽度都是正方形（宽高都写死 12.25rem = 196px），窄屏时居中：
+      二维码是正方形，横着长的气泡会让它四周留白不均，看着像被塞进去的。
+      用 aspect-square 时高度会被内容撑到 201px（标签行高 21px 比预留的 16px 高），
+      所以这里直接写死高度，多出的 5px 只吃掉底部内边距，不会裁到二维码。
+    -->
+    <section class="mx-auto flex h-[12.25rem] w-[12.25rem] flex-col rounded-lg border border-line-subtle bg-surface p-5 sm:mx-0">
       <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-fg-faint">
         <AppIcon name="qr" :size="14" />
         WeChat
@@ -120,12 +126,12 @@ async function copyEmail() {
         height="128"
         loading="lazy"
         decoding="async"
-        class="mt-3 h-32 w-32 rounded-md border border-line-subtle object-cover"
+        class="mt-3 h-32 w-32 self-center rounded-md border border-line-subtle object-contain"
       />
 
       <div
         v-else
-        class="mt-3 flex h-32 w-32 flex-col items-center justify-center gap-2 rounded-md border border-dashed border-line text-center"
+        class="mt-3 flex h-32 w-32 flex-col items-center justify-center gap-2 self-center rounded-md border border-dashed border-line text-center"
       >
         <AppIcon name="qr" :size="22" class="text-fg-faint" />
         <span class="font-mono text-xs leading-relaxed text-fg-faint">二维码<br />预留位</span>
