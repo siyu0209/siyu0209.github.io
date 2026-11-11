@@ -284,32 +284,46 @@ History 模式需要托管商把未知路径回落成 `index.html`。仓库根�
 
 ---
 
-## 部署（两条路，选一条）
+## 部署（已上线）
 
-两条路产物一样，区别只在网址形态：GitHub Pages 是**子路径**（`https://用户名.github.io/仓库名/`），Vercel 是**根路径**（`https://项目名.vercel.app`）。前者不用注册新账号，后者以后能绑自己的域名。
+站点已经在线：**<https://siyu0209.github.io/>** —— 把这个网址发给任何人，用手机或电脑直接打开就能看，不需要本机开着。
 
-### 路线 A：GitHub Pages（一条命令）
+### 改完内容怎么重新发布
 
-只需要一个 GitHub 令牌，其余脚本全包了。
-
-1. 打开 <https://github.com/settings/tokens> → **Generate new token (classic)** → 勾选 **`repo`** → 生成并复制（形如 `ghp_xxx`）。
-2. 在本项目根目录执行：
+一条命令：
 
 ```powershell
-.\scripts\publish.ps1 -Token ghp_你的令牌
+npm run deploy -- -Token ghp_你的令牌
 ```
 
-脚本会依次完成：校验账号 → 没有仓库就自动建一个公开仓库（默认名 `portfolio`）→ 用 `/<仓库名>/` 前缀构建 → 初始化 git 并推送 `main` → 打开仓库的 Pages 服务 → 打印最终网址。
+（等价于 `.\scripts\publish.ps1 -Token ghp_你的令牌`；令牌在 <https://github.com/settings/tokens> 生成，classic 勾 `repo`。）
 
-3. 等 1–2 分钟，访问 `https://<你的用户名>.github.io/<仓库名>/`。
+脚本做五件事：校验账号 → 没有仓库就建一个公开仓库 → 按部署形态构建 → 源码推 `main`、构建产物推 `gh-pages` → 把 Pages 的发布源指向 `gh-pages` 并等构建完成，最后打印网址。
 
-以后改了内容，再跑一次同样的命令就会重新发布；也可以直接 `git push`，Pages 会自己重建。
+### 仓库的两个分支
 
-> **为什么要用脚本构建**：Pages 的站点在子路径下，必须 `BASE_PATH=/<仓库名>/` 构建，否则 JS/CSS 会去根目录找、整页白屏。脚本已经处理；手动跑 `npm run build` 得到的是根路径包，**不能**直接传 Pages。
+| 分支 | 内容 | 谁在改 |
+| --- | --- | --- |
+| `main` | 源码（`src/`、`public/`、配置文件） | 你和 `npm run deploy` |
+| `gh-pages` | 构建产物（`dist/` 里的 20 个文件） | 只由 `npm run deploy` 写 |
+
+产物不进 `main`（`dist/` 在 `.gitignore` 第 5 行），所以仓库里不会堆一堆带哈希的旧文件。
+
+> **网址为什么是根路径**：仓库名是 `siyu0209.github.io`，GitHub 会把它当成「用户站点」，网址不带仓库名，构建时 `base = /`。如果换成普通仓库名，脚本会自动改成 `/<仓库名>/` 前缀构建——手写路径会漏，所以 `src/utils/asset.js` 统一给 JSON 里的图片路径加前缀。
 >
-> 令牌只用于这一次推送，脚本推完会立刻把 `.git/config` 里的 remote 改回普通地址，不留在仓库里。
+> **令牌不落到仓库**：脚本推完会立刻把 `.git/config` 里的 remote 改回普通地址（`https://github.com/...`），不会留下带令牌的 URL。
 
-### 路线 B：Vercel（根路径，以后可绑域名）
+### 已知限制：详情页链接的 HTTP 状态码是 404
+
+GitHub Pages 是纯静态服务器，**不支持 rewrite**。访问 `https://siyu0209.github.io/projects/video-player` 时返回的状态码是 `404`，返回的正文却是本站的 `404.html`（由 `scripts/postbuild.mjs` 从 `index.html` 复制），`vue-router` 正常接管，**在浏览器里看完全正常**。
+
+影响面：
+- 分享**首页**链接：卡片（标题 / 描述 / 大图）正常；
+- 分享**详情页**链接：部分平台（微信、Twitter）抓到 404 状态会放弃生成预览卡片。
+
+要彻底消掉这个 404，换到支持 rewrite 的托管（Netlify / Vercel / Cloudflare Pages，见下），或改成 hash 路由（网址会变丑，不推荐）。
+
+### 可选：换到 Vercel（根路径，以后能绑自己的域名）
 
 #### 第 1 步：本地初始化 git
 
@@ -369,7 +383,7 @@ git push -u origin main
 
 逐条打勾，全过再投简历。
 
-- [ ] **1. 域名已替换**：`grep -rn "yg-portfolio.example.com" src index.html` 搜不到任何结果。真实域名通过 `VITE_SITE_URL` 环境变量传入（构建时写进 `og:url`、`canonical`、`og:image`），不再手改文件。
+- [ ] **1. 站点地址一致**：`npm run build` 时传入真实域名（`$env:VITE_SITE_URL='https://siyu0209.github.io'`），构建后 `dist/index.html` 里的 `og:url`、`canonical`、`og:image` 都指向它。当前线上已是 `https://siyu0209.github.io/`。
 - [ ] **2. 构建干净**：`npm run build` 无报错；`npm run preview` 首页正常，点进详情页后**刷新**不 404。
 - [ ] **3. 分享图可访问**：浏览器直接打开 `https://你的域名/og-cover.png` 能看到 1200×630 的图；`curl -I` 返回 `200` 且 `content-type: image/png`。
 - [ ] **4. 分享卡片正确**：把链接贴进微信 / 飞书 / [Twitter Card Validator](https://cards-dev.twitter.com/validator)，标题、描述、大图都对。改完域名要重新抓一次，平台有缓存。
