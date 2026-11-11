@@ -13,7 +13,13 @@
 import AppIcon from '@/components/AppIcon.vue'
 import { copyText } from '@/composables/useClipboard.js'
 import { showToast } from '@/composables/useToast.js'
-import { contactEmail, contactGitHub, contactWechatQr } from '@/data/contact.js'
+import {
+  contactEmail,
+  contactGitHub,
+  contactResume,
+  contactResumeFileName,
+  contactWechatQr,
+} from '@/data/contact.js'
 import { asset } from '@/utils/asset.js'
 
 async function copyEmail() {
@@ -77,6 +83,25 @@ async function copyEmail() {
         <p v-else class="mt-3 font-mono text-xs leading-relaxed text-fg-faint">
           [ 待填写：在 src/data/profile.json 的 contact.github 填上主页地址 ]
         </p>
+      </section>
+
+      <!-- 简历：文件在 public/resume.pdf，换简历覆盖同名文件即可 -->
+      <section v-if="contactResume" class="rounded-lg border border-line-subtle bg-surface p-5">
+        <p class="flex items-center gap-2 font-mono text-xs uppercase tracking-widest text-fg-faint">
+          <AppIcon name="book" :size="14" />
+          Resume
+        </p>
+
+        <a
+          :href="contactResume"
+          :download="contactResumeFileName"
+          class="mt-3 inline-flex items-center gap-1.5 font-mono text-sm text-fg transition-colors duration-base ease-out-soft hover:text-accent"
+        >
+          <AppIcon name="download" :size="13" />
+          下载 PDF 简历
+        </a>
+
+        <p class="mt-2 font-mono text-xs text-fg-faint">一页纸，含教育经历、实习与项目经历</p>
       </section>
     </div>
 

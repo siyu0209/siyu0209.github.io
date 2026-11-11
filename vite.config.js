@@ -21,7 +21,7 @@ const basePath = process.env.BASE_PATH || '/'
  * 分享卡片里的 og:url / og:image 必须是绝对地址，而爬虫通常不执行 JS，
  * 所以这一步必须在构建期写进 HTML，不能只靠运行时的 seo.js。
  */
-const siteRoot = (process.env.VITE_SITE_URL || 'https://yg-portfolio.example.com').replace(/\/+$/, '')
+const siteRoot = (process.env.VITE_SITE_URL || 'https://siyu0209.github.io').replace(/\/+$/, '')
 
 /** 确保基础路径以斜杠结尾，拼地址时不会出现 host/portfolio 少了那一撇 */
 const baseWithSlash = basePath.endsWith('/') ? basePath : `${basePath}/`

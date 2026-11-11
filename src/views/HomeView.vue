@@ -21,6 +21,8 @@ import ProjectCard from '@/components/ProjectCard.vue'
 import SkillMatrix from '@/components/SkillMatrix.vue'
 import TimelineList from '@/components/TimelineList.vue'
 import ContactPanel from '@/components/ContactPanel.vue'
+import AppIcon from '@/components/AppIcon.vue'
+import { contactResume, contactResumeFileName } from '@/data/contact.js'
 
 // 目标岗位：和 profile.json 里的 role 呼应，但这里给全量清单
 const targetRoles = ['前端开发', '客户端开发', '工具开发', 'AI 应用开发']
@@ -75,6 +77,31 @@ onBeforeUnmount(() => window.clearTimeout(fadeTimer))
           {{ role }}
         </li>
       </ul>
+
+      <!--
+        首屏操作：只给两个真正会被点的落点。
+        「查看项目」用页内锚点（不刷新页面），「下载简历」直接给 PDF 文件。
+        简历文件没配就整块隐藏，不留一个点不动的按钮。
+      -->
+      <div class="mt-9 flex flex-wrap items-center gap-3">
+        <a
+          href="#work"
+          class="inline-flex items-center gap-2 rounded-full border border-line bg-surface px-4 py-2 text-sm text-fg transition-colors duration-base ease-out-soft hover:border-accent hover:text-accent"
+        >
+          查看项目
+          <AppIcon name="arrow-down" :size="14" />
+        </a>
+
+        <a
+          v-if="contactResume"
+          :href="contactResume"
+          :download="contactResumeFileName"
+          class="inline-flex items-center gap-2 rounded-full border border-accent/45 px-4 py-2 text-sm text-accent transition-colors duration-base ease-out-soft hover:border-accent hover:bg-accent/10"
+        >
+          <AppIcon name="download" :size="14" />
+          下载简历
+        </a>
+      </div>
     </section>
 
     <!-- ============ 精选项目 ============ -->

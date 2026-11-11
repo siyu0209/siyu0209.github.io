@@ -19,6 +19,8 @@ defineProps({
 const paths = {
   'arrow-left': ['M19 12H5', 'M12 19l-7-7 7-7'],
   'arrow-right': ['M5 12h14', 'M12 5l7 7-7 7'],
+  // 向下箭头：首屏「查看项目」的页内跳转
+  'arrow-down': ['M12 5v14', 'M5 12l7 7 7-7'],
   'arrow-up-right': ['M7 17 17 7', 'M8 7h9v9'],
   'chevron-left': ['M15 18l-6-6 6-6'],
   'chevron-right': ['M9 18l6-6-6-6'],

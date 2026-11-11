@@ -22,9 +22,9 @@ import profile from '@/data/profile.json'
  *   SITE_ROOT = https://siyu0209.github.io      （构建时由 VITE_SITE_URL 注入）
  *   BASE      = /portfolio/                      （构建时由 BASE_PATH 注入，Vite 的 BASE_URL）
  *   SITE_URL  = https://siyu0209.github.io/portfolio/
- * 没有注入时退回占位域名，页面照样能跑，只是分享卡片的链接不对。
+ * 没有注入时退回当前线上域名，页面照样能跑，分享卡片的链接也仍然正确。
  */
-const SITE_ROOT = (import.meta.env.VITE_SITE_URL || 'https://yg-portfolio.example.com').replace(
+const SITE_ROOT = (import.meta.env.VITE_SITE_URL || 'https://siyu0209.github.io').replace(
   /\/+$/,
   '',
 )

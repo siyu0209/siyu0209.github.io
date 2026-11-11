@@ -49,8 +49,14 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 ├── .gitignore                  忽略依赖、构建产物、本地日志与 .vercel
 ├── package.json                依赖与脚本
 ├── public/                     原样拷贝进 dist/ 的静态资源（不走打包）
-│   ├── favicon.svg                 站点图标：32×32，姓名首字母 Y 的橙色折线
-│   └── og-cover.png                分享卡片封面：1200×630
+│   ├── favicon.svg                 站点图标：32×32，姓名首字母 Z 的橙色描边
+│   ├── og-cover.png                分享卡片封面：1200×630
+│   ├── resume.pdf                  简历 PDF：首屏 / 左栏 / 联系区三处共用同一个文件
+│   └── projects/                   项目截图与微信二维码（已合成 1600×1000 的画布图）
+├── scripts/
+│   ├── postbuild.mjs           构建后处理：生成 404.html + .nojekyll（GitHub Pages 深链接回落）
+│   ├── build-sub.mjs           子路径构建：BASE_PATH=/仓库名/ 时用
+│   └── publish.ps1             一键发布到 GitHub Pages（构建 → 推 main 与 gh-pages → 触发 Pages）
 └── src/
     ├── main.js                 应用入口：创建实例 → 注册指令 → 挂路由 → 挂载；按序引入全局样式
     ├── App.vue                 根组件：跳转链接 + 左侧身份栏 + 右侧滚动内容区（<RouterView />）
@@ -76,7 +82,7 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
     │   ├── ProjectNav.vue          上一个 / 下一个项目（按 JSON 顺序，两端不循环）
     │   ├── SkillMatrix.vue         能力矩阵：四组技能卡，每项一个带图标标签 + 一句能力证明
     │   ├── TimelineList.vue        竖向时间线：左侧竖线与圆点首尾收口，右侧节点说明
-    │   ├── ContactPanel.vue        联系区：邮箱一键复制 / GitHub 链接 / 微信二维码预留位
+    │   ├── ContactPanel.vue        联系区：邮箱一键复制 / GitHub 链接 / 简历下载 / 微信二维码
     │   └── ToastHost.vue           轻提示宿主：Teleport 到 body，底部居中胶囊，2 秒自动消失
     ├── composables/            组合式函数（跨组件共享的状态与能力）
     │   ├── useToast.js             showToast()：模块级状态，任何组件都能触发提示
@@ -90,11 +96,12 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
     ├── router/
     │   └── index.js            路由表：路径映射、滚动行为（含锚点）、懒加载、切换后写 SEO
     ├── utils/
-    │   └── seo.js              全站唯一的 SEO 出口：按路由解析 title / description / OG / canonical
+    │   ├── seo.js              全站唯一的 SEO 出口：按路由解析 title / description / OG / canonical
+    │   └── asset.js            给 JSON 里的运行时路径补 BASE_URL 前缀（子路径部署不 404）
     ├── data/                   数据层：改内容不用碰组件
     │   ├── projects.json           项目数据源（唯一项目事实来源）
     │   ├── profile.json            个人信息：定位 / 简介 / 能力矩阵 / 时间线 / 联系方式
-    │   ├── contact.js              从 profile.json 读出联系方式，供左栏 / 页脚 / 联系区共用
+    │   ├── contact.js              从 profile.json 读出联系方式与简历，供左栏 / 页脚 / 联系区共用
     │   └── categories.js           分类枚举 → 中文标签 + 筛选选项
     └── styles/
         ├── tokens.css          设计 Token：颜色 / 字号 / 间距 / 圆角 / 阴影 / 动效
@@ -167,6 +174,15 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 - 文件名只用小写字母、数字、短横线。中文名和空格会被转义成一长串 `%E4%BD%A0`，出问题时很难排查。
 - 图片不在首屏链路上：卡片图 `loading="lazy"`，详情页首图 `fetchpriority="high"`。所以图片体积影响的是滚动体验，不影响首屏那 64 kB。
 
+#### 简历怎么换
+
+简历是 `public/resume.pdf` 一个文件，全站三个入口共用它：首屏「下载简历」按钮、左栏 / 页脚的联系方式行、联系区的 Resume 卡片。
+
+1. 用同名文件覆盖 `public/resume.pdf`（**文件名不要改**，改了要同步改 `src/data/profile.json` 的 `contact.resume`）。
+2. 下载时的文件名由 `src/data/contact.js` 的 `contactResumeFileName` 决定，当前是 `周涛-简历.pdf`——HR 存到桌面能认出是谁的。
+3. 想临时下线简历：把 `profile.json` 的 `contact.resume` 改成 `null`，三处入口同时消失，不会留死链。
+4. 体积建议 ≤ 1 MB。PDF 只在点击时下载，不占首屏体积，但太大在手机上打开会卡。
+
 ### 详情页的七个区块（从上到下）
 
 | # | 区块 | 数据来源 | 空数据时 |
@@ -187,7 +203,7 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 
 | 锚点 | 区块 | 数据来源 |
 |---|---|---|
-| — | 首屏：一句话定位 + 简介 + 求职方向 | `profile.statement` `profile.intro` |
+| — | 首屏：一句话定位 + 简介 + 求职方向 + 「查看项目 / 下载简历」两个按钮 | `profile.statement` `profile.intro` `profile.contact.resume` |
 | `#work` | 01 精选项目：分类筛选 + 卡片网格（1 / 2 / 3 列） | `projects.json` |
 | `#stack` | 02 能力矩阵：四组技能卡，每项一句能力证明 | `profile.skills` |
 | `#about` | 03 关于：第一人称简介 + 三条工作原则 | `profile.about` `profile.principles` |
@@ -198,14 +214,14 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 
 | 字段 | 类型 | 说明 |
 |---|---|---|
-| `name` `nameNote` | string | 姓名与并排小字（当前是 `YG` / `2027`） |
+| `name` `nameNote` | string | 姓名与并排小字（当前是 `周涛` / `2027`） |
 | `role` `status` `tagline` | string | 左栏定位、状态胶囊文案、一句话签名 |
 | `statement` `intro` | string | 首屏主标题与跟随简介 |
 | `about` | string | 关于区第一人称简介（≤ 120 字） |
 | `principles` | string[] | 三条工作原则，关于区编号列表 |
 | `skills` | {group,icon,items[{name,icon,proof}]}[] | 能力矩阵。**组名与每项的 `proof` 都要能被面试官追问**，别写「精通」 |
 | `timeline` | {period,title,description}[] | 时间线节点，按时间正序；最后一条通常是当前状态 |
-| `contact` | {email,github,wechatQr} | 三个键都可为 `null`。`email` 有值才出现「复制」按钮；`wechatQr` 填图片路径才有二维码 |
+| `contact` | {email,github,wechatQr,resume} | 四个键都可为 `null`。`email` 有值才出现「复制」按钮；`wechatQr` 填图片路径才有二维码；`resume` 填 PDF 路径才出现三处简历入口 |
 
 `icon` 取值必须存在于 `src/components/AppIcon.vue` 的图标表里；写错时该图标不渲染，其余内容照常显示。
 
@@ -218,7 +234,7 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 ## 无障碍与键盘
 
 - 页面第一个可聚焦元素是「跳到主要内容」（`.skip-link`），回车直接把焦点送进 `<main id="main">`，不用逐项 Tab 过导航。
-- 所有内容图片都有 `alt`：卡片图「<项目名> 界面截图」、首图「<项目名> 封面」、图集用 caption、二维码「微信二维码，扫码添加 YG」。纯装饰的内联 SVG 一律 `aria-hidden="true"`，不进无障碍树。
+- 所有内容图片都有 `alt`：卡片图「<项目名> 界面截图」、首图「<项目名> 封面」、图集用 caption、二维码「微信二维码，扫码添加周涛」。纯装饰的内联 SVG 一律 `aria-hidden="true"`，不进无障碍树。
 - 只有图标没有文字的按钮都带 `aria-label`：复制邮箱（含地址本身）、源码 / 下载（含项目名与「在新标签页打开」）、放大查看（含图注）、灯箱的关闭 / 上一张 / 下一张。
 - 灯箱是 `role="dialog" aria-modal="true"`：打开时锁 `body` 滚动并把焦点送到关闭键，关闭时把焦点还给刚才点击的那张图。
 - Tab 顺序实测（375 宽首页）：跳转链接 → 5 项锚点导航 → 5 个筛选按钮 → 5 张项目卡 → 页脚。
@@ -230,12 +246,12 @@ npm run preview  # 本地预览 dist/ 产物（http://127.0.0.1:4173）
 ## SEO 与分享卡片
 
 - 每页的 `title` / `description` 由 `src/utils/seo.js` 的 `resolveSeo()` 一处产出，`router.afterEach` 调用 `applySeo()` 写进文档：
-  - 首页：`YG · 技术作品集` + 定位描述
-  - 详情页：`<项目名> · <角色> · YG`，描述取 `summary` + 前三个技术栈
-  - 地址写错：`未找到项目 · YG` + `robots: noindex, follow`（`og:type` 也退回 `website`，不伪装成文章）
+  - 首页：`周涛 · 技术作品集` + 定位描述
+  - 详情页：`<项目名> · 周涛`，描述取 `summary` + 前三个技术栈
+  - 地址写错：`未找到项目 · 周涛` + `robots: noindex, follow`（`og:type` 也退回 `website`，不伪装成文章）
 - Open Graph / Twitter 一并写入：`og:type`（详情页 `article`）、`og:site_name`、`og:locale`、`og:title`、`og:description`、`og:url`、`og:image`（绝对地址 + 1200×630 + `image:alt`）、`twitter:card=summary_large_image`，以及 `<link rel="canonical">`。
 - `index.html` 里另外硬编码了一份首页的 OG 标签，给不执行 JS 的抓取器兜底（某些微信 / 飞书版本就是这样取卡片）。
-- ⚠️ **上线前必须替换域名**：`src/utils/seo.js` 的 `SITE_URL` 与 `index.html` 里的 `og:url` / `og:image` 两处都还是 `https://yg-portfolio.example.com`。不改的话分享卡片会指向一个不存在的域，图片也抓不到。
+- 域名不写在代码里：构建时读环境变量 `VITE_SITE_URL`（缺省就退回 `https://siyu0209.github.io`），发布脚本会自动传当前域名。手动构建时想换域名：`$env:VITE_SITE_URL='https://你的域名'` 后再 `npm run build`。
 - 分享封面是 `public/og-cover.png`（1200×630，52 kB）。改文案就重画这张图，别改文件名——`OG_IMAGE` 和 `index.html` 都写死了它。
 
 ---
