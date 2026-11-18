@@ -201,5 +201,53 @@
       "download": null,
       "docs": "https://github.com/siyu0209/whaleops-portfolio#readme"
     }
+  },
+  {
+    "id": "motrix-android",
+    "title": "Motrix for Android 下载管理器",
+    "subtitle": "内置 aria2 引擎，原生 Kotlin 界面和原版 3B Web 界面可以切换",
+    "category": "desktop",
+    "year": 2026,
+    "role": "独立开发：Kotlin 界面 / aria2 集成 / 3B 桥接 / 签名打包",
+    "glyph": "download",
+    "techStack": ["Kotlin", "aria2", "JSON-RPC", "WebView", "Android"],
+    "cover": "/projects/motrix-cover.jpg",
+    "coverThumb": "/projects/motrix-cover-thumb.jpg",
+    "gallery": [
+      { "src": "/projects/motrix-1.jpg", "caption": "原版 3B 界面 · 仪表板" },
+      { "src": "/projects/motrix-2.jpg", "caption": "原版 3B 界面 · 下载列表" }
+    ],
+    "summary": "把 Motrix 的下载体验搬进 Android：端内直接跑 aria2，配两套界面——自己写的 Kotlin 原生界面，和直接加载的原版 3B Web 界面。不用连电脑，一个包独立跑完直链、磁力和种子下载。",
+    "highlights": [
+      "一个包里两套界面，随时切换",
+      "aria2 静态二进制内置，不依赖电脑",
+      "原生界面轻，3B 界面还原原版"
+    ],
+    "efficiency": [],
+    "background": "手机上要么没有像样的下载器，要么得靠电脑上的 aria2 开个 Web UI 遥控。我想让手机自己把直链、磁力和种子都下载下来，同时保留桌面端那套完整的下载与 BT 设置。",
+    "difficulty": "aria2 是个命令行程序，得把它当子进程管起来、用 JSON-RPC 驱动、进程挂了还能拉起来；原版 Motrix 是 Electron 里的 React Web UI，直接塞进手机 WebView 全是桌面布局，要注入适配；两套界面还共用同一个引擎实例，状态不能打架；最后是签名打包，Release 包不能带 debuggable。",
+    "solution": "把 aria2c 编成 arm64-v8a / armeabi-v7a 静态二进制放进 jniLibs，App 启动时拉起进程并建一个 JSON-RPC 客户端；原生界面用 Kotlin 直接吃这套模型；3B 界面在本地起 BridgeServer + RpcDispatcher，让原版渲染器以为还在跟原版后端说话，再叠一层移动端适配的 CSS/JS；两套界面读同一份引擎状态，设置改动即时同步。",
+    "result": "一个 15.4 MB 的签名安装包，Android 7.0 以上装上就能用：直链 / 磁力 / 种子、三档限速、Tracker 管理与完整 BT 设置、60 秒速度曲线、深浅色与中英双语。非官方移植，本项目 MIT，内置 aria2 为 GPLv2。",
+    "supportPlatforms": ["Android 7.0+", "arm64-v8a", "armeabi-v7a"],
+    "downloadCount": null,
+    "featureList": [
+      "直链 / 磁力 / 种子（多文件勾选）",
+      "暂停恢复、重新下载、清除已完成",
+      "原版 3B Web 界面与 Kotlin 原生界面切换",
+      "三档限速：龟速 / 常速 / 高速",
+      "Tracker 管理与完整 BT 设置",
+      "首页 60 秒速度趋势图",
+      "浅色 / 深色主题，中 / 英双语",
+      "手机 / 平板 / 横屏自适应"
+    ],
+    "repoStars": null,
+    "contributors": null,
+    "coreModule": [],
+    "links": {
+      "demo": null,
+      "repo": "https://github.com/siyu0209/motrix-android",
+      "download": "https://github.com/siyu0209/motrix-android/raw/main/dist/motrix-android-2.4.3-release-signed.apk",
+      "docs": "https://github.com/siyu0209/motrix-android#readme"
+    }
   }
 ]

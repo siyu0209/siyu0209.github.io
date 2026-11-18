@@ -145,7 +145,7 @@ onBeforeUnmount(() => window.clearTimeout(fadeTimer))
         {{ profile.about }}
       </p>
 
-      <!-- 三个项目的来历：比抽象的原则更像人话，也让面试官知道你为什么做这些 -->
+      <!-- 五个项目的来历：比抽象的原则更像人话，也让面试官知道你为什么做这些 -->
       <ul class="mt-8 space-y-7">
         <li
           v-for="(item, i) in profile.history"

@@ -53,7 +53,7 @@ function absoluteUrl(path) {
 
 /** 首页描述：与 index.html 的静态 meta 保持一致，避免两次抓取拿到不同文案 */
 export const HOME_DESCRIPTION =
-  '周涛的个人技术作品集：Android 客户端、FFmpeg 播放内核、VS Code 扩展。2027 届应届生，三个项目从解码到打包发布全程独立完成。'
+  '周涛的个人技术作品集：Android 客户端、FFmpeg 播放内核、VS Code 扩展。2027 届应届生，五个项目从解码到打包发布全程独立完成。'
 
 /**
  * 把长描述截到 n 个字符。

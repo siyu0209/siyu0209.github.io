@@ -120,6 +120,14 @@ def main():
     thumb(o('relay-cover.jpg'), o('relay-cover-thumb.jpg'))
     compose_wide(o('relay-1.jpg'), p('Claude Code Relay Proxy', 'Claude Code Relay Proxy扩展插件对话页.png'))
     print('ok relay')
+    # Motrix：源图另放在第三个参数给的目录（手机竖屏 + 平板横屏混用）
+    if len(sys.argv) > 3:
+        m = lambda n: os.path.join(sys.argv[3], n)
+        compose_phone(o('motrix-cover.jpg'), [m('speed_home.png'), m('settings_fix27.png')])
+        thumb(o('motrix-cover.jpg'), o('motrix-cover-thumb.jpg'))
+        compose_wide(o('motrix-1.jpg'), m('3B_dashboard_final.png'))
+        compose_wide(o('motrix-2.jpg'), m('3B_downloads.png'))
+        print('ok motrix')
 
 
 if __name__ == '__main__':
